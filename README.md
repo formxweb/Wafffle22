@@ -41,10 +41,14 @@ tools/build.mjs         data.js → index.html (tarif satırları, sos rafı, JS
 ## Menü güncelleme
 
 1. `assets/js/data.js` dosyasını düzenle (ad, içerik, sos, görsel).
-2. `npm run build` komutunu çalıştır (`node tools/build.mjs`). Statik HTML (SEO / JS kapalı) ve etkileşim katmanı aynı veriden üretilir.
+2. `npm run render` komutunu çalıştır (`node tools/build.mjs`) ve değişen `index.html` dosyasını commit'le. Statik HTML (SEO / JS kapalı) ve etkileşim katmanı aynı veriden üretilir.
 3. Yeni görsel ekleniyorsa kare kırp ve `name.webp`, `name-240.webp` (gerekirse `name-480.webp`) olarak `assets/img/` içine koy, `IMG` tablosuna ekle.
 
 Yerel önizleme: `npm run serve` → <http://localhost:8080>
+
+## Yayın (Vercel)
+
+Derleme adımı yok: `index.html` repoda hazır halde durur, Vercel kök klasörü olduğu gibi yayınlar (`vercel.json` → `outputDirectory: "."`). Bu yüzden `package.json` içinde bilinçli olarak `build` adında bir script yok; olursa Vercel onu çalıştırıp çıktıyı `public` klasöründe arar ve dağıtım başarısız olur.
 
 ## Kalite kontrol (yapılanlar)
 

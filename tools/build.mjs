@@ -3,7 +3,8 @@
   Renders the data-driven parts of index.html from assets/js/data.js,
   so the static HTML (SEO, no-JS) and the interactive layer share one source.
 
-  Usage:  node tools/build.mjs
+  Usage:  npm run render   (or: node tools/build.mjs)
+  Not named "build" on purpose: Vercel would run it and look for a /public output.
   It rewrites the blocks between <!-- build:NAME --> and <!-- /build:NAME --> in place.
 */
 import { readFile, writeFile } from 'node:fs/promises';
@@ -110,19 +111,20 @@ function jsonld() {
     }],
   }));
   const data = { '@context': 'https://schema.org', '@graph': [org, ...shops] };
-  return `\n  <script type="application/ld+json">\n${JSON.stringify(data, null, 2)}\n  </script>\n  `;
+  return `\n  <script type="application/ld+json">\n${JSON.stringify(data, null, 2)}\n  </script>`;
 }
 
+/* Replaces everything between the markers; running it twice gives the same file. */
 function inject(html, name, content) {
-  const re = new RegExp(`(<!-- build:${name} -->)[\\s\\S]*?(\\s*<!-- /build:${name} -->)`);
+  const re = new RegExp(`(<!-- build:${name} -->)[\\s\\S]*?\\n([ \\t]*)(<!-- /build:${name} -->)`);
   if (!re.test(html)) throw new Error(`marker build:${name} not found`);
-  return html.replace(re, `$1${content}$2`);
+  return html.replace(re, (_, start, indent, end) => `${start}${content.replace(/\s+$/, '')}\n${indent}${end}`);
 }
 
 let html = await readFile(file, 'utf8');
 html = inject(html, 'tarifler', TARIFS.map(row).join(''));
 html = inject(html, 'sauces', sauces());
 html = inject(html, 'jsonld', jsonld());
-html = inject(html, 'mags', '\n            ' + Object.values(MAGS).map((m) => esc(m.name)).join(' · ') + '\n           ');
+html = inject(html, 'mags', '\n            ' + Object.values(MAGS).map((m) => esc(m.name)).join(' · '));
 await writeFile(file, html);
 console.log(`index.html: ${TARIFS.length} tarif, ${Object.keys(SAUCES).length} sos, ${BRANCHES.length} şube`);

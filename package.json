@@ -4,7 +4,7 @@
   "type": "module",
   "description": "Waffle Mina — static brand site (no framework, no build step required to serve).",
   "scripts": {
-    "build": "node tools/build.mjs",
+    "render": "node tools/build.mjs",
     "serve": "python3 -m http.server 8080"
   }
 }
