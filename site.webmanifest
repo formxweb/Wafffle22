@@ -1,0 +1,13 @@
+{
+  "name": "Waffle Mina",
+  "short_name": "Waffle Mina",
+  "lang": "tr",
+  "start_url": "/",
+  "display": "browser",
+  "background_color": "#EF7B02",
+  "theme_color": "#EF7B02",
+  "icons": [
+    { "src": "assets/brand/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "assets/brand/logo.png", "sizes": "255x256", "type": "image/png" }
+  ]
+}
